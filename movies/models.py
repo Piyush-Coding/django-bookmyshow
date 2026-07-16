@@ -2,15 +2,48 @@ from django.db import models
 from django.contrib.auth.models import User 
 
 
-class Movie(models.Model):
-    name= models.CharField(max_length=255)
-    image= models.ImageField(upload_to="movies/")
-    rating = models.DecimalField(max_digits=3,decimal_places=1)
-    cast= models.TextField()
-    description= models.TextField(blank=True,null=True) # optional
+class Genre(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['name']),
+        ]
 
     def __str__(self):
         return self.name
+
+
+class Language(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['name']),
+        ]
+
+    def __str__(self):
+        return self.name
+
+
+class Movie(models.Model):
+    name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to="movies/")
+    rating = models.DecimalField(max_digits=3, decimal_places=1)
+    cast = models.TextField()
+    description = models.TextField(blank=True, null=True)
+    genres = models.ManyToManyField(Genre, related_name='movies', blank=True)
+    languages = models.ManyToManyField(Language, related_name='movies', blank=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['name']),
+            models.Index(fields=['rating']),
+        ]
+
+    def __str__(self):
+        return self.name
+
 
 class Theater(models.Model):
     name = models.CharField(max_length=255)
