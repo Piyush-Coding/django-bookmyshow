@@ -142,13 +142,14 @@ def book_seats(request,theater_id):
         error_seats=[]
         if not selected_Seats:
             return render(request,"movies/seats_selection.html",{'theaters':theaters,"seats":seats,'error':"No seat selected"})
+        created_booking_ids = []
         for seat_id in selected_Seats:
             seat=get_object_or_404(Seat,id=seat_id,theater=theaters)
             if seat.is_booked:
                 error_seats.append(seat.seat_number)
                 continue
             try:
-                Booking.objects.create(
+                booking = Booking.objects.create(
                     user=request.user,
                     seat=seat,
                     movie=theaters.movie,
@@ -156,8 +157,47 @@ def book_seats(request,theater_id):
                 )
                 seat.is_booked=True
                 seat.save()
+                created_booking_ids.append(booking.id)
             except IntegrityError:
                 error_seats.append(seat.seat_number)
+        
+        # Trigger confirmation email if bookings were successfully created
+        if created_booking_ids:
+            import uuid
+            payment_id = f"PAYID-{uuid.uuid4().hex[:12].upper()}"
+            ticket_price = 150.00  # Default ticket price
+            total_amount = len(created_booking_ids) * ticket_price
+            
+            try:
+                from bookings.tasks import send_booking_confirmation_email
+                send_booking_confirmation_email.delay(
+                    booking_ids=created_booking_ids,
+                    recipient_email=request.user.email,
+                    payment_id=payment_id,
+                    total_amount=f"INR {total_amount:.2f}"
+                )
+            except Exception as e:
+                import logging
+                logger = logging.getLogger('bookings')
+                logger.warning(
+                    f"Celery/Redis broker is unavailable (Error: {str(e)}). "
+                    f"Falling back to synchronous email dispatch for Booking IDs {created_booking_ids}."
+                )
+                try:
+                    # Import and execute the task function synchronously
+                    from bookings.tasks import send_booking_confirmation_email
+                    send_booking_confirmation_email(
+                        booking_ids=created_booking_ids,
+                        recipient_email=request.user.email,
+                        payment_id=payment_id,
+                        total_amount=f"INR {total_amount:.2f}"
+                    )
+                except Exception as sync_err:
+                    logger.error(
+                        f"Failed synchronous fallback email dispatch for Booking IDs {created_booking_ids}. "
+                        f"Error: {str(sync_err)}"
+                    )
+
         if error_seats:
             error_message = f"The following seats are already booked: {', '.join(error_seats)}"
             return render(request,'movies/seats_selection.html',{'theaters':theaters,"seats":seats,'error':error_message})

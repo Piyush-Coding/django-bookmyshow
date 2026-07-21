@@ -1,0 +1,166 @@
+INFO 2026-07-17 23:56:46,895 autoreload 10096 15908 Watching for file changes with StatReloader
+INFO 2026-07-17 23:56:58,202 autoreload 10096 15908 D:\intership traning\bookmyseat\bookmyseat\__init__.py changed, reloading.
+INFO 2026-07-17 23:56:58,754 autoreload 15512 7184 Watching for file changes with StatReloader
+INFO 2026-07-18 00:01:00,786 autoreload 17488 6340 Watching for file changes with StatReloader
+INFO 2026-07-18 00:01:15,703 log 17488 5312 "POST /logout/ HTTP/1.1" 200 11192
+INFO 2026-07-18 00:01:24,228 log 17488 5312 "GET / HTTP/1.1" 200 1358746
+INFO 2026-07-18 00:01:27,709 log 17488 5312 "GET /login/ HTTP/1.1" 200 14824
+INFO 2026-07-18 00:01:46,312 log 17488 5312 "POST /login/ HTTP/1.1" 302 0
+INFO 2026-07-18 00:01:53,881 log 17488 5312 "GET / HTTP/1.1" 200 1359139
+INFO 2026-07-18 00:02:01,365 log 17488 5312 "GET /movies/8/theaters HTTP/1.1" 200 15189
+INFO 2026-07-18 00:02:07,798 log 17488 5312 "GET /movies/theater/1/seats/book/ HTTP/1.1" 200 17890
+ERROR 2026-07-18 00:03:23,591 views 17488 5312 Failed to queue booking confirmation email for booking IDs [3]. Error: Error 10061 connecting to 127.0.0.1:6379. No connection could be made because the target machine actively refused it.
+INFO 2026-07-18 00:03:23,593 log 17488 5312 "POST /movies/theater/1/seats/book/ HTTP/1.1" 302 0
+INFO 2026-07-18 00:03:29,495 log 17488 5312 "GET /profile/ HTTP/1.1" 200 18425
+INFO 2026-07-18 00:05:31,970 autoreload 17488 6340 D:\intership traning\bookmyseat\bookmyseat\settings.py changed, reloading.
+INFO 2026-07-18 00:05:32,621 autoreload 9676 19148 Watching for file changes with StatReloader
+INFO 2026-07-18 00:06:02,999 log 9676 10384 "POST /logout/ HTTP/1.1" 200 11192
+INFO 2026-07-18 00:06:15,130 log 9676 10384 "GET / HTTP/1.1" 200 1358746
+INFO 2026-07-18 00:06:24,479 log 9676 10384 "GET /admin/ HTTP/1.1" 302 0
+INFO 2026-07-18 00:06:24,548 log 9676 10384 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4080
+INFO 2026-07-18 00:06:24,572 log 9676 18160 "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:24,573 log 9676 10384 "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:24,575 log 9676 15664 "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:24,582 log 9676 19112 "GET /static/admin/css/login.css HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:24,584 log 9676 5748 "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:24,584 log 9676 20380 "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:24,588 log 9676 20380 "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:31,571 log 9676 20380 "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2026-07-18 00:06:34,436 log 9676 20380 "GET /admin/ HTTP/1.1" 200 13694
+INFO 2026-07-18 00:06:34,482 log 9676 20380 "GET /static/admin/css/dashboard.css HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:34,482 log 9676 19112 "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:34,483 log 9676 5748 "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:43,983 log 9676 5748 "GET /admin/auth/user/ HTTP/1.1" 200 15076
+INFO 2026-07-18 00:06:44,027 log 9676 15664 "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:44,028 log 9676 19112 "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:44,027 log 9676 10384 "GET /static/admin/js/core.js HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:44,027 log 9676 5748 "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:44,029 log 9676 18160 "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:44,033 log 9676 10384 "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:44,033 log 9676 19112 "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:44,033 log 9676 15664 "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:44,034 log 9676 5748 "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:44,039 log 9676 19112 "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:44,046 log 9676 19112 "GET /static/admin/img/icon-no.svg HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:44,179 log 9676 5748 "GET /static/admin/img/search.svg HTTP/1.1" 200 607
+INFO 2026-07-18 00:06:44,184 log 9676 5748 "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:46,511 log 9676 20380 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-07-18 00:06:46,530 log 9676 20380 "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:46,530 log 9676 5748 "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:46,552 log 9676 5748 "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1761
+INFO 2026-07-18 00:06:55,610 log 9676 5748 "GET /admin/auth/user/1/change/ HTTP/1.1" 200 26842
+INFO 2026-07-18 00:06:55,653 log 9676 18160 "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:55,654 log 9676 5748 "GET /static/admin/css/forms.css HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:55,654 log 9676 15664 "GET /static/admin/js/calendar.js HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:55,656 log 9676 19112 "GET /static/admin/js/SelectBox.js HTTP/1.1" 200 4530
+INFO 2026-07-18 00:06:55,657 log 9676 10384 "GET /static/admin/js/SelectFilter2.js HTTP/1.1" 200 16428
+INFO 2026-07-18 00:06:55,661 log 9676 19112 "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:55,662 log 9676 10384 "GET /static/admin/css/widgets.css HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:55,665 log 9676 10384 "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:58,037 log 9676 20380 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-07-18 00:06:58,113 log 9676 19112 "GET /static/admin/img/icon-clock.svg HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:58,114 log 9676 10384 "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 304 0
+INFO 2026-07-18 00:06:58,115 log 9676 20380 "GET /static/admin/img/selector-icons.svg HTTP/1.1" 200 2387
+INFO 2026-07-18 00:07:21,094 basehttp 9676 20380 - Broken pipe from ('127.0.0.1', 59158)
+INFO 2026-07-18 00:07:22,913 log 9676 10384 "GET /admin/movies/booking/ HTTP/1.1" 200 13895
+INFO 2026-07-18 00:07:26,410 log 9676 10384 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-07-18 00:08:01,343 log 9676 10384 "GET /admin/movies/booking/2/change/ HTTP/1.1" 200 278906
+INFO 2026-07-18 00:08:03,854 log 9676 10384 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-07-18 00:08:14,693 log 9676 10384 "GET /admin/movies/booking/2/delete/ HTTP/1.1" 200 10344
+INFO 2026-07-18 00:08:14,730 log 9676 10384 "GET /static/admin/js/cancel.js HTTP/1.1" 200 884
+INFO 2026-07-18 00:08:22,548 log 9676 10384 "POST /admin/movies/booking/2/delete/ HTTP/1.1" 302 0
+INFO 2026-07-18 00:08:25,920 log 9676 10384 "GET /admin/movies/booking/ HTTP/1.1" 200 13511
+INFO 2026-07-18 00:08:28,407 log 9676 10384 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-07-18 00:08:28,423 log 9676 10384 "GET /static/admin/img/icon-yes-dark.svg HTTP/1.1" 304 0
+INFO 2026-07-18 00:08:49,745 log 9676 10384 "GET /admin/movies/booking/3/change/ HTTP/1.1" 200 278906
+INFO 2026-07-18 00:08:52,217 log 9676 10384 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-07-18 00:08:58,735 log 9676 10384 "GET /admin/movies/booking/3/delete/ HTTP/1.1" 200 10344
+INFO 2026-07-18 00:09:05,963 log 9676 10384 "POST /admin/movies/booking/3/delete/ HTTP/1.1" 302 0
+INFO 2026-07-18 00:09:09,288 log 9676 10384 "GET /admin/movies/booking/ HTTP/1.1" 200 12930
+INFO 2026-07-18 00:09:11,760 log 9676 10384 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-07-18 00:09:31,696 log 9676 10384 "GET /admin/movies/booking/1/change/ HTTP/1.1" 200 278906
+INFO 2026-07-18 00:09:34,135 log 9676 10384 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-07-18 00:09:41,215 log 9676 10384 "GET /admin/movies/booking/1/delete/ HTTP/1.1" 200 10344
+INFO 2026-07-18 00:09:49,562 log 9676 10384 "POST /admin/movies/booking/1/delete/ HTTP/1.1" 302 0
+INFO 2026-07-18 00:09:53,064 log 9676 10384 "GET /admin/movies/booking/ HTTP/1.1" 200 10738
+INFO 2026-07-18 00:09:55,449 log 9676 10384 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-07-18 00:10:03,602 log 9676 10384 "POST /admin/logout/ HTTP/1.1" 200 3475
+INFO 2026-07-18 00:10:09,595 log 9676 10384 "GET /admin/ HTTP/1.1" 302 0
+INFO 2026-07-18 00:10:09,611 log 9676 10384 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4080
+INFO 2026-07-18 00:10:21,939 log 9676 10384 "GET / HTTP/1.1" 200 1358746
+INFO 2026-07-18 00:10:24,446 log 9676 10384 "GET /login/ HTTP/1.1" 200 14824
+INFO 2026-07-18 00:10:46,031 log 9676 10384 "POST /login/ HTTP/1.1" 302 0
+INFO 2026-07-18 00:10:51,839 log 9676 10384 "GET / HTTP/1.1" 200 1359139
+INFO 2026-07-18 00:10:59,000 log 9676 10384 "GET /profile/ HTTP/1.1" 200 16214
+INFO 2026-07-18 00:11:10,686 log 9676 10384 "GET / HTTP/1.1" 200 1359139
+INFO 2026-07-18 00:11:15,908 log 9676 10384 "GET /movies/8/theaters HTTP/1.1" 200 15189
+INFO 2026-07-18 00:11:21,763 log 9676 10384 "GET /movies/theater/1/seats/book/ HTTP/1.1" 200 17435
+ERROR 2026-07-18 00:12:38,448 views 9676 18572 Failed to queue booking confirmation email for booking IDs [4]. Error: Error 10061 connecting to 127.0.0.1:6379. No connection could be made because the target machine actively refused it.
+INFO 2026-07-18 00:12:38,450 log 9676 18572 "POST /movies/theater/1/seats/book/ HTTP/1.1" 302 0
+INFO 2026-07-18 00:12:42,429 log 9676 18572 "GET /profile/ HTTP/1.1" 200 16838
+INFO 2026-07-18 00:16:09,977 autoreload 9676 19148 D:\intership traning\bookmyseat\movies\views.py changed, reloading.
+INFO 2026-07-18 00:16:11,186 autoreload 4284 15896 Watching for file changes with StatReloader
+INFO 2026-07-18 00:17:22,438 autoreload 3308 8980 Watching for file changes with StatReloader
+INFO 2026-07-18 00:17:48,299 log 3308 19208 "GET / HTTP/1.1" 200 1359139
+INFO 2026-07-18 00:17:56,453 log 3308 19208 "GET /movies/9/theaters HTTP/1.1" 200 15185
+INFO 2026-07-18 00:18:02,270 log 3308 19208 "GET /movies/theater/2/seats/book/ HTTP/1.1" 200 18802
+WARNING 2026-07-18 00:19:14,363 views 3308 19208 Celery/Redis broker is unavailable (Error: Error 10061 connecting to 127.0.0.1:6379. No connection could be made because the target machine actively refused it.). Falling back to synchronous email dispatch for Booking IDs [5].
+INFO 2026-07-18 00:19:14,363 tasks 3308 19208 Attempting to send booking confirmation email. Booking ID(s): [5], Recipient: freelancingmpi@gmail.com, Payment ID: PAYID-A5BDCC084776, Timestamp: 2026-07-18 00:19:14
+WARNING 2026-07-18 00:19:17,653 tasks 3308 19208 Failed to send booking confirmation email. Retry attempt 1/3. Booking ID(s): [5], Recipient: freelancingmpi@gmail.com, Reason: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials a92af1059eb24-13ce2de31a7sm8068237c88.15 - gsmtp'), Timestamp: 2026-07-18 00:19:17
+ERROR 2026-07-18 00:19:17,654 views 3308 19208 Failed synchronous fallback email dispatch for Booking IDs [5]. Error: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials a92af1059eb24-13ce2de31a7sm8068237c88.15 - gsmtp')
+INFO 2026-07-18 00:19:17,655 log 3308 19208 "POST /movies/theater/2/seats/book/ HTTP/1.1" 302 0
+INFO 2026-07-18 00:19:22,751 log 3308 19208 "GET /profile/ HTTP/1.1" 200 17627
+INFO 2026-07-18 00:20:09,361 log 3308 19208 "GET /password-reset/ HTTP/1.1" 200 14826
+ERROR 2026-07-18 00:20:21,201 forms 3308 19208 Failed to send password reset email to 1
+Traceback (most recent call last):
+  File "D:\Python\Lib\site-packages\django\contrib\auth\forms.py", line 417, in send_mail
+    email_message.send()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "D:\Python\Lib\site-packages\django\core\mail\message.py", line 358, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "D:\Python\Lib\site-packages\django\core\mail\backends\smtp.py", line 148, in send_messages
+    new_conn_created = self.open()
+  File "D:\Python\Lib\site-packages\django\core\mail\backends\smtp.py", line 103, in open
+    self._partial_connection.login(self.username, self.password)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Python\Lib\smtplib.py", line 762, in login
+    raise last_exception
+  File "D:\Python\Lib\smtplib.py", line 751, in login
+    (code, resp) = self.auth(
+                   ~~~~~~~~~^
+        authmethod, getattr(self, method_name),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        initial_response_ok=initial_response_ok)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Python\Lib\smtplib.py", line 669, in auth
+    raise SMTPAuthenticationError(code, resp)
+smtplib.SMTPAuthenticationError: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 5a478bee46e88-3142a1bb770sm10577488eec.16 - gsmtp')
+INFO 2026-07-18 00:20:21,216 log 3308 19208 "POST /password-reset/ HTTP/1.1" 302 0
+INFO 2026-07-18 00:20:23,867 log 3308 19208 "GET /password-reset/done/ HTTP/1.1" 200 11774
+INFO 2026-07-18 00:20:49,299 log 3308 19208 "GET / HTTP/1.1" 200 1359139
+INFO 2026-07-18 00:20:58,022 log 3308 19208 "GET /movies/10/theaters HTTP/1.1" 200 15185
+INFO 2026-07-18 00:21:03,879 log 3308 19208 "GET /movies/theater/3/seats/book/ HTTP/1.1" 200 15453
+INFO 2026-07-18 00:21:14,991 log 3308 19208 "GET / HTTP/1.1" 200 1359139
+INFO 2026-07-18 00:21:22,105 log 3308 19208 "GET /movies/9/theaters HTTP/1.1" 200 15185
+INFO 2026-07-18 00:21:28,465 log 3308 19208 "GET /movies/theater/2/seats/book/ HTTP/1.1" 200 18347
+WARNING 2026-07-18 00:22:39,657 views 3308 19208 Celery/Redis broker is unavailable (Error: Error 10061 connecting to 127.0.0.1:6379. No connection could be made because the target machine actively refused it.). Falling back to synchronous email dispatch for Booking IDs [6].
+INFO 2026-07-18 00:22:39,658 tasks 3308 19208 Attempting to send booking confirmation email. Booking ID(s): [6], Recipient: freelancingmpi@gmail.com, Payment ID: PAYID-1D7B946D5CFB, Timestamp: 2026-07-18 00:22:39
+WARNING 2026-07-18 00:22:42,783 tasks 3308 19208 Failed to send booking confirmation email. Retry attempt 1/3. Booking ID(s): [6], Recipient: freelancingmpi@gmail.com, Reason: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 5a478bee46e88-31429f9bcd9sm10081571eec.3 - gsmtp'), Timestamp: 2026-07-18 00:22:42
+ERROR 2026-07-18 00:22:42,784 views 3308 19208 Failed synchronous fallback email dispatch for Booking IDs [6]. Error: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 5a478bee46e88-31429f9bcd9sm10081571eec.3 - gsmtp')
+INFO 2026-07-18 00:22:42,786 log 3308 19208 "POST /movies/theater/2/seats/book/ HTTP/1.1" 302 0
+INFO 2026-07-18 00:22:48,514 log 3308 19208 "GET /profile/ HTTP/1.1" 200 18416
+INFO 2026-07-18 00:25:26,075 autoreload 19088 18148 Watching for file changes with StatReloader
+INFO 2026-07-22 02:03:04,760 autoreload 8252 16204 Watching for file changes with StatReloader
+INFO 2026-07-22 02:03:18,724 log 8252 13520 "GET / HTTP/1.1" 200 1358746
+INFO 2026-07-22 02:03:20,828 log 8252 13520 "GET /media/movies/gol_maal__1979_.jpg HTTP/1.1" 304 0
+INFO 2026-07-22 02:03:20,833 log 8252 13520 "GET /media/movies/arth__1982_.jpg HTTP/1.1" 304 0
+INFO 2026-07-22 02:03:20,849 log 8252 13520 "GET /media/movies/masoom__1983_.jpg HTTP/1.1" 304 0
+INFO 2026-07-22 02:03:20,854 log 8252 18840 "GET /media/movies/saaransh__1984_.jpg HTTP/1.1" 304 0
+INFO 2026-07-22 02:04:01,643 log 8252 18840 "GET / HTTP/1.1" 200 1358746
+INFO 2026-07-22 02:04:07,536 log 8252 18840 "GET /login/ HTTP/1.1" 200 14824
+INFO 2026-07-22 02:04:22,533 log 8252 18840 "GET /login/ HTTP/1.1" 200 14824
+INFO 2026-07-22 02:05:01,872 log 8252 18840 "POST /login/ HTTP/1.1" 302 0
+INFO 2026-07-22 02:05:06,942 log 8252 18840 "GET / HTTP/1.1" 200 1359139
+INFO 2026-07-22 02:05:35,867 log 8252 18840 "POST /logout/ HTTP/1.1" 200 11192
+INFO 2026-07-22 02:05:38,523 log 8252 18840 "GET /login/ HTTP/1.1" 200 14824
