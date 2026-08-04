@@ -12,6 +12,10 @@
             "dest": "/static/$1"
         },
         {
+            "src": "/media/(.*)",
+            "dest": "bookmyseat/wsgi.py"
+        },
+        {
             "src": "/(.*)",
             "dest": "bookmyseat/wsgi.py"
         }
