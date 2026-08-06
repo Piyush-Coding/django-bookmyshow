@@ -53,7 +53,6 @@ except ImportError:
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     *WHITENOISE_MIDDLEWARE,
-    "whitenoise.middleware.WhiteNoiseMiddleware",
 
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
