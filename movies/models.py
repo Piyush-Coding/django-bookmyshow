@@ -67,5 +67,7 @@ class Booking(models.Model):
     movie=models.ForeignKey(Movie,on_delete=models.CASCADE)
     theater=models.ForeignKey(Theater,on_delete=models.CASCADE)
     booked_at=models.DateTimeField(auto_now_add=True)
+    email_sent=models.BooleanField(default=False)
+    
     def __str__(self):
-        return f'Booking by{self.user.username} for {self.seat.seat_number} at {self.theater.name}'
+        return f'Booking by {self.user.username} for {self.seat.seat_number} at {self.theater.name}'

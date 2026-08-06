@@ -3,7 +3,45 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import models
 from .models import Movie, Theater, Seat, Booking, Genre, Language
 from django.contrib.auth.decorators import login_required
-from django.db import IntegrityError
+from django.db import models, transaction, IntegrityError
+import threading
+import uuid
+import logging
+
+logger = logging.getLogger('bookings')
+
+def _dispatch_booking_email(booking_ids, recipient_email, payment_id, total_amount_str):
+    """
+    Non-blocking helper function to execute email dispatch in a background thread.
+    Tries Celery .delay() first; falls back to thread-based task execution if broker is down.
+    """
+    try:
+        from bookings.tasks import send_booking_confirmation_email
+        send_booking_confirmation_email.delay(
+            booking_ids=booking_ids,
+            recipient_email=recipient_email,
+            payment_id=payment_id,
+            total_amount=total_amount_str
+        )
+    except Exception as e:
+        logger.warning(
+            f"Celery/Redis broker is unavailable (Error: {str(e)}). "
+            f"Falling back to thread-based email dispatch for Booking IDs {booking_ids}."
+        )
+        try:
+            from bookings.tasks import send_booking_confirmation_email
+            send_booking_confirmation_email(
+                booking_ids=booking_ids,
+                recipient_email=recipient_email,
+                payment_id=payment_id,
+                total_amount=total_amount_str
+            )
+        except Exception as sync_err:
+            logger.error(
+                f"Failed thread-based email dispatch for Booking IDs {booking_ids}. "
+                f"Error: {str(sync_err)}"
+            )
+
 
 def movie_list(request):
     # Retrieve query params
@@ -134,75 +172,79 @@ def theater_list(request,movie_id):
 
 
 @login_required(login_url='/login/')
-def book_seats(request,theater_id):
-    theaters=get_object_or_404(Theater,id=theater_id)
-    seats=Seat.objects.filter(theater=theaters)
-    if request.method=='POST':
-        selected_Seats= request.POST.getlist('seats')
-        error_seats=[]
-        if not selected_Seats:
-            return render(request,"movies/seats_selection.html",{'theaters':theaters,"seats":seats,'error':"No seat selected"})
-        created_booking_ids = []
-        for seat_id in selected_Seats:
-            seat=get_object_or_404(Seat,id=seat_id,theater=theaters)
-            if seat.is_booked:
-                error_seats.append(seat.seat_number)
-                continue
-            try:
-                booking = Booking.objects.create(
-                    user=request.user,
-                    seat=seat,
-                    movie=theaters.movie,
-                    theater=theaters
-                )
-                seat.is_booked=True
-                seat.save()
-                created_booking_ids.append(booking.id)
-            except IntegrityError:
-                error_seats.append(seat.seat_number)
+def book_seats(request, theater_id):
+    theaters = get_object_or_404(Theater, id=theater_id)
+    seats = Seat.objects.filter(theater=theaters)
+    
+    if request.method == 'POST':
+        selected_Seats = request.POST.getlist('seats')
+        error_seats = []
         
-        # Trigger confirmation email if bookings were successfully created
+        if not selected_Seats:
+            return render(request, "movies/seats_selection.html", {
+                'theaters': theaters,
+                'seats': seats,
+                'error': "No seat selected. Please select at least one seat before booking."
+            })
+            
+        created_booking_ids = []
+        
+        with transaction.atomic():
+            for seat_id in selected_Seats:
+                try:
+                    seat = get_object_or_404(
+                        Seat,
+                        id=seat_id,
+                        theater=theaters
+                    )
+                except Exception:
+                    continue
+                    
+                if seat.is_booked:
+                    error_seats.append(seat.seat_number)
+                    continue
+                    
+                try:
+                    booking = Booking.objects.create(
+                        user=request.user,
+                        seat=seat,
+                        movie=theaters.movie,
+                        theater=theaters
+                    )
+                    seat.is_booked = True
+                    seat.save()
+                    created_booking_ids.append(booking.id)
+                except IntegrityError:
+                    error_seats.append(seat.seat_number)
+        
+        # Trigger non-blocking email notification if bookings were successfully created
         if created_booking_ids:
-            import uuid
             payment_id = f"PAYID-{uuid.uuid4().hex[:12].upper()}"
             ticket_price = 150.00  # Default ticket price
             total_amount = len(created_booking_ids) * ticket_price
             
-            try:
-                from bookings.tasks import send_booking_confirmation_email
-                send_booking_confirmation_email.delay(
-                    booking_ids=created_booking_ids,
-                    recipient_email=request.user.email,
-                    payment_id=payment_id,
-                    total_amount=f"INR {total_amount:.2f}"
-                )
-            except Exception as e:
-                import logging
-                logger = logging.getLogger('bookings')
-                logger.warning(
-                    f"Celery/Redis broker is unavailable (Error: {str(e)}). "
-                    f"Falling back to synchronous email dispatch for Booking IDs {created_booking_ids}."
-                )
-                try:
-                    # Import and execute the task function synchronously
-                    from bookings.tasks import send_booking_confirmation_email
-                    send_booking_confirmation_email(
-                        booking_ids=created_booking_ids,
-                        recipient_email=request.user.email,
-                        payment_id=payment_id,
-                        total_amount=f"INR {total_amount:.2f}"
-                    )
-                except Exception as sync_err:
-                    logger.error(
-                        f"Failed synchronous fallback email dispatch for Booking IDs {created_booking_ids}. "
-                        f"Error: {str(sync_err)}"
-                    )
+            threading.Thread(
+                target=_dispatch_booking_email,
+                args=(
+                    created_booking_ids,
+                    request.user.email,
+                    payment_id,
+                    f"INR {total_amount:.2f}"
+                ),
+                daemon=True
+            ).start()
 
-        if error_seats:
-            error_message = f"The following seats are already booked: {', '.join(error_seats)}"
-            return render(request,'movies/seats_selection.html',{'theaters':theaters,"seats":seats,'error':error_message})
+        if error_seats and not created_booking_ids:
+            error_message = f"The following seat(s) are already booked: {', '.join(error_seats)}"
+            return render(request, 'movies/seats_selection.html', {
+                'theaters': theaters,
+                'seats': seats,
+                'error': error_message
+            })
+            
         return redirect('profile')
-    return render(request,'movies/seats_selection.html',{'theaters':theaters,"seats":seats})
+        
+    return render(request, 'movies/seats_selection.html', {'theaters': theaters, 'seats': seats})
 
 
 
