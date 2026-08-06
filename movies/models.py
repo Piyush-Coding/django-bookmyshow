@@ -1,3 +1,4 @@
+import re
 from django.db import models
 from django.contrib.auth.models import User 
 
@@ -26,6 +27,8 @@ class Language(models.Model):
         return self.name
 
 
+from urllib.parse import urlparse, parse_qs
+
 class Movie(models.Model):
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to="movies/")
@@ -34,6 +37,12 @@ class Movie(models.Model):
     description = models.TextField(blank=True, null=True)
     genres = models.ManyToManyField(Genre, related_name='movies', blank=True)
     languages = models.ManyToManyField(Language, related_name='movies', blank=True)
+    trailer_url = models.URLField(
+        max_length=500,
+        blank=True,
+        null=True,
+        help_text="YouTube trailer URL or embed link (e.g. https://www.youtube.com/watch?v=...)"
+    )
 
     class Meta:
         indexes = [
@@ -43,6 +52,70 @@ class Movie(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def youtube_video_id(self):
+        """
+        Safely extract and validate an 11-character YouTube video ID.
+        Prevents XSS, script injection, and invalid domain embedding.
+        """
+        if not self.trailer_url:
+            return None
+            
+        url_str = str(self.trailer_url).strip()
+        
+        # 1. Parse URL structure safely
+        try:
+            parsed = urlparse(url_str)
+        except Exception:
+            return None
+
+        # 2. Strict Domain Whitelist Check
+        netloc = parsed.netloc.lower()
+        valid_domains = {
+            'youtube.com', 'www.youtube.com', 'm.youtube.com',
+            'youtu.be', 'www.youtu.be',
+            'youtube-nocookie.com', 'www.youtube-nocookie.com'
+        }
+        if netloc not in valid_domains:
+            return None
+
+        candidate_id = None
+
+        # 3. Extract candidate video ID from path or query parameters
+        if 'youtu.be' in netloc:
+            path = parsed.path.lstrip('/')
+            candidate_id = path.split('/')[0] if path else None
+        else:
+            if parsed.path.startswith('/embed/'):
+                parts = parsed.path.split('/embed/')
+                if len(parts) > 1:
+                    candidate_id = parts[1].split('/')[0].split('?')[0]
+            elif parsed.path.startswith('/v/'):
+                parts = parsed.path.split('/v/')
+                if len(parts) > 1:
+                    candidate_id = parts[1].split('/')[0].split('?')[0]
+            elif 'v' in parse_qs(parsed.query):
+                v_list = parse_qs(parsed.query).get('v')
+                if v_list:
+                    candidate_id = v_list[0]
+
+        # 4. Strict 11-Character Alphanumeric Fullmatch Check
+        if candidate_id and re.fullmatch(r'^[a-zA-Z0-9_-]{11}$', candidate_id):
+            return candidate_id
+
+        return None
+
+    @property
+    def youtube_embed_url(self):
+        """
+        Return secure youtube-nocookie.com embed URL.
+        Enforces privacy-enhanced mode and domain whitelisting.
+        """
+        v_id = self.youtube_video_id
+        if v_id:
+            return f"https://www.youtube-nocookie.com/embed/{v_id}?rel=0&modestbranding=1&enablejsapi=1"
+        return None
 
 
 class Theater(models.Model):

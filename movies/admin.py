@@ -11,8 +11,14 @@ class LanguageAdmin(admin.ModelAdmin):
 
 @admin.register(Movie)
 class MovieAdmin(admin.ModelAdmin):
-    list_display = ['name', 'rating', 'cast', 'description']
+    list_display = ['name', 'rating', 'cast', 'has_trailer', 'description']
+    search_fields = ['name', 'cast']
     filter_horizontal = ['genres', 'languages']
+    fields = ['name', 'rating', 'image', 'cast', 'description', 'trailer_url', 'genres', 'languages']
+
+    @admin.display(boolean=True, description='Trailer Added')
+    def has_trailer(self, obj):
+        return bool(obj.youtube_video_id)
 
 @admin.register(Theater)
 class TheaterAdmin(admin.ModelAdmin):

@@ -221,9 +221,26 @@
                                 </div>
                             </div>
                             
-                            <a href="{% url 'theater_list' movie.id %}" class="btn btn-primary btn-block py-2 font-weight-bold" style="border-radius: 8px; transition: background-color 0.3s;">
-                                Book Tickets <i class="fas fa-ticket-alt ml-2"></i>
-                            </a>
+                            <div class="row no-gutters mt-auto pt-2" style="margin-left: -3px; margin-right: -3px;">
+                                {% if movie.youtube_video_id %}
+                                <div class="col-5 px-1">
+                                    <a href="{% url 'theater_list' movie.id %}" class="btn btn-outline-danger btn-sm w-100 font-weight-bold text-truncate shadow-sm d-flex align-items-center justify-content-center" style="border-radius: 8px; height: 38px;" title="Watch Trailer">
+                                        <i class="fas fa-play mr-1 small"></i> Trailer
+                                    </a>
+                                </div>
+                                <div class="col-7 px-1">
+                                    <a href="{% url 'theater_list' movie.id %}" class="btn btn-primary btn-sm w-100 font-weight-bold text-truncate shadow-sm d-flex align-items-center justify-content-center" style="border-radius: 8px; height: 38px;">
+                                        Book Tickets <i class="fas fa-ticket-alt ml-1 small"></i>
+                                    </a>
+                                </div>
+                                {% else %}
+                                <div class="col-12 px-1">
+                                    <a href="{% url 'theater_list' movie.id %}" class="btn btn-primary btn-sm w-100 font-weight-bold text-truncate shadow-sm d-flex align-items-center justify-content-center" style="border-radius: 8px; height: 38px;">
+                                        Book Tickets <i class="fas fa-ticket-alt ml-1 small"></i>
+                                    </a>
+                                </div>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
