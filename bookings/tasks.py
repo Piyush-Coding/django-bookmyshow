@@ -10,16 +10,34 @@ from django.conf import settings
 logger = logging.getLogger('bookings')
 
 @shared_task(bind=True, max_retries=3)
-def send_booking_confirmation_email(self, booking_ids, recipient_email, payment_id=None, total_amount=None):
+def send_booking_confirmation_email(self_or_ids, *args, **kwargs):
     """
     Asynchronously sends a movie booking confirmation HTML email to the user.
     Retries up to 3 times with exponential backoff if sending fails.
+    Supports both Celery task invocation and direct function calls.
     """
-    # Import locally within the task to prevent circular dependencies / early loading issues
     from movies.models import Booking
-    
+
+    if hasattr(self_or_ids, 'request'):
+        # Invoked as a bound Celery task
+        self_task = self_or_ids
+        booking_ids = args[0] if args else kwargs.get('booking_ids')
+        recipient_email = args[1] if len(args) > 1 else kwargs.get('recipient_email')
+        payment_id = args[2] if len(args) > 2 else kwargs.get('payment_id')
+        total_amount = args[3] if len(args) > 3 else kwargs.get('total_amount')
+    else:
+        # Invoked directly as a normal python function
+        self_task = None
+        booking_ids = self_or_ids
+        recipient_email = args[0] if args else kwargs.get('recipient_email')
+        payment_id = args[1] if len(args) > 1 else kwargs.get('payment_id')
+        total_amount = args[2] if len(args) > 2 else kwargs.get('total_amount')
+
+    if isinstance(booking_ids, (int, str)):
+        booking_ids = [booking_ids]
+
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    booking_ids_str = ", ".join(str(bid) for bid in booking_ids)
+    booking_ids_str = ", ".join(str(bid) for bid in (booking_ids or []))
     
     logger.info(
         f"Attempting to send booking confirmation email. "
@@ -29,7 +47,7 @@ def send_booking_confirmation_email(self, booking_ids, recipient_email, payment_
     
     try:
         # Retrieve all Booking records with optimized database queries
-        bookings = list(Booking.objects.filter(id__in=booking_ids).select_related('movie', 'theater', 'seat', 'user'))
+        bookings = list(Booking.objects.filter(id__in=booking_ids or []).select_related('movie', 'theater', 'seat', 'user'))
         
         if not bookings:
             logger.error(
@@ -52,7 +70,7 @@ def send_booking_confirmation_email(self, booking_ids, recipient_email, payment_
         seat_numbers = [b.seat.seat_number for b in bookings]
         seat_numbers_str = ", ".join(seat_numbers)
         
-        # Prepare context context for email rendering (free of passwords, OTPs, or payment credentials)
+        # Prepare context for email rendering
         context = {
             'username': username,
             'movie_name': movie_name,
@@ -90,24 +108,29 @@ def send_booking_confirmation_email(self, booking_ids, recipient_email, payment_
         return f"Successfully sent confirmation email to {recipient_email}"
         
     except Exception as exc:
-        current_retry = self.request.retries
-        retry_msg = f"Retry attempt {current_retry + 1}/3"
-        
-        logger.warning(
-            f"Failed to send booking confirmation email. {retry_msg}. "
-            f"Booking ID(s): [{booking_ids_str}], Recipient: {recipient_email}, "
-            f"Reason: {str(exc)}, Timestamp: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-        )
-        
-        if current_retry >= self.max_retries:
-            logger.error(
-                f"FINAL FAILURE: Max retries ({self.max_retries}) reached. Email could not be sent. "
+        if self_task and hasattr(self_task, 'request'):
+            current_retry = getattr(self_task.request, 'retries', 0)
+            retry_msg = f"Retry attempt {current_retry + 1}/3"
+            
+            logger.warning(
+                f"Failed to send booking confirmation email. {retry_msg}. "
                 f"Booking ID(s): [{booking_ids_str}], Recipient: {recipient_email}, "
                 f"Reason: {str(exc)}, Timestamp: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
             )
-            # Re-raise the final exception so it gets marked as failed in Celery broker
-            raise exc
             
-        # Exponential backoff delay (30s, 60s, 120s)
-        countdown = (2 ** current_retry) * 30
-        raise self.retry(exc=exc, countdown=countdown)
+            if current_retry >= getattr(self_task, 'max_retries', 3):
+                logger.error(
+                    f"FINAL FAILURE: Max retries reached. Email could not be sent. "
+                    f"Booking ID(s): [{booking_ids_str}], Recipient: {recipient_email}, "
+                    f"Reason: {str(exc)}"
+                )
+                raise exc
+                
+            countdown = (2 ** current_retry) * 30
+            raise self_task.retry(exc=exc, countdown=countdown)
+        else:
+            logger.error(
+                f"Failed direct email dispatch for Booking IDs [{booking_ids_str}] to {recipient_email}. "
+                f"Reason: {str(exc)}"
+            )
+            raise exc

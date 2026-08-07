@@ -231,7 +231,7 @@ def book_seats(request, theater_id):
                     payment_id,
                     f"INR {total_amount:.2f}"
                 ),
-                daemon=True
+                daemon=False
             ).start()
 
         if error_seats and not created_booking_ids:
