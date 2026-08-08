@@ -208,7 +208,17 @@ LOGGING = {
             "handlers": ["console"],
             "level": "INFO",
         },
+        "movies": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
     },
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# TMDB API (read from environment — never hardcode credentials)
+TMDB_API_KEY = os.environ.get("TMDB_API_KEY", "")
+TMDB_API_READ_ACCESS_TOKEN = os.environ.get("TMDB_API_READ_ACCESS_TOKEN", "")
+TMDB_API_BASE_URL = os.environ.get("TMDB_API_BASE_URL", "https://api.themoviedb.org/3")
+TMDB_IMAGE_BASE_URL = os.environ.get("TMDB_IMAGE_BASE_URL", "https://image.tmdb.org/t/p/w500")

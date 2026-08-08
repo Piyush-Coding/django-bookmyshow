@@ -31,10 +31,24 @@ from urllib.parse import urlparse, parse_qs
 
 class Movie(models.Model):
     name = models.CharField(max_length=255)
-    image = models.ImageField(upload_to="movies/")
+    image = models.ImageField(upload_to="movies/", blank=True, null=True)
+    poster_url = models.URLField(
+        max_length=500,
+        blank=True,
+        null=True,
+        help_text="Remote poster URL (e.g. TMDB CDN). Preferred over local image when set.",
+    )
     rating = models.DecimalField(max_digits=3, decimal_places=1)
     cast = models.TextField()
     description = models.TextField(blank=True, null=True)
+    release_date = models.DateField(blank=True, null=True)
+    tmdb_id = models.PositiveIntegerField(
+        unique=True,
+        blank=True,
+        null=True,
+        db_index=True,
+        help_text="External TMDB movie ID used for idempotent imports.",
+    )
     genres = models.ManyToManyField(Genre, related_name='movies', blank=True)
     languages = models.ManyToManyField(Language, related_name='movies', blank=True)
     trailer_url = models.URLField(
@@ -52,6 +66,18 @@ class Movie(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def poster_display_url(self):
+        """Prefer remote poster_url; fall back to local ImageField URL."""
+        if self.poster_url:
+            return self.poster_url
+        if self.image:
+            try:
+                return self.image.url
+            except (ValueError, OSError):
+                return None
+        return None
 
     @property
     def youtube_video_id(self):

@@ -11,10 +11,15 @@ class LanguageAdmin(admin.ModelAdmin):
 
 @admin.register(Movie)
 class MovieAdmin(admin.ModelAdmin):
-    list_display = ['name', 'rating', 'cast', 'has_trailer', 'description']
-    search_fields = ['name', 'cast']
+    list_display = ['name', 'rating', 'tmdb_id', 'release_date', 'has_trailer', 'cast']
+    list_filter = ['release_date', 'genres', 'languages']
+    search_fields = ['name', 'cast', 'tmdb_id']
     filter_horizontal = ['genres', 'languages']
-    fields = ['name', 'rating', 'image', 'cast', 'description', 'trailer_url', 'genres', 'languages']
+    fields = [
+        'name', 'tmdb_id', 'rating', 'release_date', 'image', 'poster_url',
+        'cast', 'description', 'trailer_url', 'genres', 'languages',
+    ]
+    readonly_fields = []
 
     @admin.display(boolean=True, description='Trailer Added')
     def has_trailer(self, obj):

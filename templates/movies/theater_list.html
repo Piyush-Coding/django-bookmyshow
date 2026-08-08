@@ -26,6 +26,9 @@
 
           <div class="small text-light opacity-75 mb-3">
             <div><i class="fas fa-users me-2 text-warning"></i> <strong>Cast:</strong> {{ movie.cast }}</div>
+            {% if movie.release_date %}
+            <div><i class="fas fa-calendar-alt me-2 text-warning"></i> <strong>Release:</strong> {{ movie.release_date|date:"M d, Y" }}</div>
+            {% endif %}
             <div>
               <i class="fas fa-language me-2 text-warning"></i> <strong>Languages:</strong> 
               {% for lang in movie.languages.all %}
